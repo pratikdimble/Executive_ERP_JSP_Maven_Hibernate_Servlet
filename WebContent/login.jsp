@@ -11,6 +11,7 @@
 <body>
 <%! String userdbName;
 String userdbPsw;
+String userdbRole;
 %>
 <%
 	Connection con= null;
@@ -22,12 +23,13 @@ String userdbPsw;
 		String dbpsw = "oracle";
 
 		
-		String sql = "select * from erptab where name=? and password=?";
+		String sql = "select * from erptab where name=? and password=? and role=?";
 	
 		String name = request.getParameter("name");
 		String password= request.getParameter("password");
+		String role=request.getParameter("role");
 	
-	if(!(name.equals(null) || name.equals("")) && !(password.equals(null) || password.equals("")))
+	if(!(name.equals(null) || name.equals("")) && !(password.equals(null) || password.equals("")) && !role.equals("select"))
 {
 	try{
 		Class.forName(driverName);
@@ -35,23 +37,36 @@ String userdbPsw;
 			ps = con.prepareStatement(sql);
 			ps.setString(1, name);
 			ps.setString(2, password);
-			
+			ps.setString(3, role);
 			rs = ps.executeQuery();
 		
 		if(rs.next())
 		{ 
 			userdbName = rs.getString("name");
 			userdbPsw = rs.getString("password");
+			userdbRole= rs.getString("role");
 				
-		if(name.equals(userdbName) && password.equals(userdbPsw))	
+		if(name.equals(userdbName) && password.equals(userdbPsw) && role.equalsIgnoreCase("ADMIN") )	
 	{
 		session.setAttribute("name",userdbName);
-			
-		response.sendRedirect("welcome.jsp"); 
+			session.setAttribute("role",userdbRole);
+		response.sendRedirect("firstpage.jsp"); 
 	} 
+	else if(name.equals(userdbName) && password.equals(userdbPsw) && role.equalsIgnoreCase("Service Executive") )	
+	{
+		session.setAttribute("name",userdbName);
+			session.setAttribute("role",userdbRole);
+		response.sendRedirect("registration.html"); 
+	} 
+		else if(name.equals(userdbName) && password.equals(userdbPsw) && role.equalsIgnoreCase("Product Executive") )	
+	{
+		session.setAttribute("name",userdbName);
+			session.setAttribute("role",userdbRole);
+		response.sendRedirect("selectprodform.jsp"); 
+	}
 }
 	else
-		response.sendRedirect("error.jsp");
+		response.sendRedirect("loginerror.jsp");
 	rs.close();
 	ps.close(); 
 	}
@@ -66,8 +81,19 @@ else
 	%>
 		<center><p style="color:red">Error In Login</p></center>
 	<% 
-		getServletContext().getRequestDispatcher("/home.jsp").include(request,response);
+		getServletContext().getRequestDispatcher("/loginform.jsp").include(request,response);
 	}
 %>
+
+<form method="post" action="adminlogindetails.jsp">
+<%
+	String st=request.getParameter("role");
+	String uname=request.getParameter("name");
+	String pass=request.getParameter("password");
+		session.setAttribute("myUser", uname);
+		session.setAttribute("myPass", pass);
+		session.setAttribute("myRole", role);
+%>
+</form>
 </body>
 </html>

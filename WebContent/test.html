@@ -1,0 +1,105 @@
+    <%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.Connection"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<style>
+
+</style>
+<body>
+<form method="post" action="#">
+  
+Yes <input type="radio" onclick="javascript:yesnoCheck();" name="yesno" id="yesCheck"> No <input type="radio" onclick="javascript:yesnoCheck();" name="yesno" id="noCheck"><br>
+    <div id="ifYes" style="visibility:hidden">
+    
+
+
+<%
+int sid =Integer.parseInt(request.getParameter("id"));
+String driverName = "oracle.jdbc.OracleDriver";
+		String url = "jdbc:oracle:thin:@localhost:1521:xe";
+		String user = "system";
+		String dbpsw = "oracle";
+
+try {
+Class.forName(driverName);
+} catch (ClassNotFoundException e) {
+e.printStackTrace();
+}
+
+Connection connection = null;
+Statement statement = null;
+ResultSet resultSet = null;
+
+
+
+try{ 
+connection = DriverManager.getConnection(url, user, dbpsw);
+statement=connection.createStatement();
+String sql ="SELECT * FROM ERP_PRODUCT WHERE PID="+sid;
+
+resultSet = statement.executeQuery(sql);
+if(!resultSet.next())
+{
+%>
+<h2><center><font color="#FF0000" size="6">RECORD NOT FOUND...</font></center></h2>
+<%
+}else
+{
+%>
+<table id="customers">
+   <tr>
+	<th>Product ID</th>
+    <th>Product Name</th>
+    <th>Product Type</th>
+    <th>Product Company</th>
+    <th>Product Cost</th>
+    <th>Product Quantity</th>
+    <th>Product Warranty</th>
+
+</tr>
+<% 
+do{
+%>
+<tr bgcolor="#DEB887">
+
+<td><%=resultSet.getString("PID") %></td>
+<td><%=resultSet.getString("NAME") %></td>
+<td><%=resultSet.getString("TYPE") %></td>
+<td><%=resultSet.getString("COMPANY")%></td>
+<td><%=resultSet.getString("COST")%></td>
+<td><%=resultSet.getString("QUANTITY")%></td>
+<td><%=resultSet.getString("WARRANTY")%></td>
+</tr>
+</table>
+<% 
+}while(resultSet.next());
+}
+} catch (Exception e) {
+e.printStackTrace();
+}
+%>
+    </div>
+        
+        other 3<input type='text' id='other3' name='other3'><br>
+        other 4<input type='text' id='other4' name='other4'><br>
+      
+</form>
+
+<script type="text/javascript">
+function yesnoCheck() {
+    if (document.getElementById('yesCheck').checked) {
+        document.getElementById('ifYes').style.visibility = 'visible';
+    }
+    else document.getElementById('ifYes').style.visibility = 'hidden';
+
+}
+</script>
+</body>
+
+</html>

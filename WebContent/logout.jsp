@@ -13,7 +13,7 @@
 <% session.invalidate(); %>
 
 <p>You have been successfully logout</p>
-<% response.addHeader("refresh","2;http://localhost:1010/ERP_Project/index.jsp"); %>
+<% response.addHeader("refresh","2;index.jsp"); %>
 </body>
 
 </html>
