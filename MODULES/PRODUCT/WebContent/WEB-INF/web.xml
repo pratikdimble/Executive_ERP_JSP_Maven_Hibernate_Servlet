@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+		xmlns="http://java.sun.com/xml/ns/javaee" 
+		xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+					http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" 
+		id="WebApp_ID" version="2.5">
+
+  <welcome-file-list>
+    <welcome-file>home.jsp</welcome-file>
+   </welcome-file-list>
+  <servlet>
+    <description></description>
+    <display-name>StudentRegistrationServlet</display-name>
+    <servlet-name>StudentRegistrationServlet</servlet-name>
+    <servlet-class>com.pratik.servlet.StudentRegistrationServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>StudentRegistrationServlet</servlet-name>
+    <url-pattern>/register</url-pattern>
+  </servlet-mapping>
+  
+  <!-- Product Contoller Servlet Configuration  -->
+  <servlet>
+    <description></description>
+    <display-name>ProductServlet</display-name>
+    <servlet-name>ProductServlet</servlet-name>
+    <servlet-class>com.erp.controller.ProductControllerServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ProductServlet</servlet-name>
+    <url-pattern>/controller</url-pattern>
+  </servlet-mapping>
+  
+ 
+</web-app>
